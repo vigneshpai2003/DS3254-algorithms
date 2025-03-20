@@ -1,5 +1,5 @@
 #pragma once
-#include <bits/algorithmfwd.h>
+#include <algorithm>
 
 #define uint unsigned int
 

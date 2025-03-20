@@ -1,4 +1,6 @@
-#include <bits/algorithmfwd.h>
+#pragma once
+
+#include <algorithm>
 
 class Polynomial
 {

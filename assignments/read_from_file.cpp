@@ -1,6 +1,6 @@
-#include <bits/stdc++.h>
 #include <string>
 #include <iostream>
+#include <fstream>
 
 int main() {
     std::ifstream file;
