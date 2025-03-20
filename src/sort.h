@@ -1,20 +1,17 @@
-#include <iostream>
-#include <chrono>
-#include <bits/stdc++.h>
-#include <fstream>
-#include <string>
-#include "array.cpp"
+#pragma once
+#include <bits/algorithmfwd.h>
 
 #define uint unsigned int
 
 void insertion_sort(int *arr, uint n)
 {
-    uint i, j, key;
+    uint i;
+    int j, key;
 
     for (i = 1; i < n; i++)
     {
         key = arr[i];
-        int j = i - 1;
+        j = i - 1;
         while (j >= 0 && arr[j] > key)
         {
             arr[j + 1] = arr[j];
@@ -84,7 +81,8 @@ void merge(int *arr, uint left, uint mid, uint right)
         k++;
     }
 
-    delete[] L, R;
+    delete[] L;
+    delete[] R;
 }
 
 void merge_sort_from(int *arr, uint left, uint right)
@@ -104,46 +102,33 @@ void merge_sort(int *arr, uint n)
     merge_sort_from(arr, 0, n - 1);
 }
 
-void collect_data(std::function<void(int *, uint)> algorithm, std::string fname, uint start, uint end, uint step, uint samples, uint limit = 0)
+uint partition(int *arr, uint p, uint r)
 {
-    std::ofstream file;
-    file.open(fname);
-
-    for (uint n = start; n <= end; n += step)
+    int x = arr[r];
+    uint i = p - 1;
+    for (uint j = i; j < r; j++)
     {
-        file << n << ", ";
-
-        for (uint i = 0; i < samples; i++)
+        if (arr[j] <= x)
         {
-            int *arr = new int[n];
-
-            randomize_array(arr, n, limit);
-
-            auto start = std::chrono::high_resolution_clock::now();
-
-            algorithm(arr, n);
-
-            auto time = std::chrono::high_resolution_clock::now() - start;
-
-            file << time.count() << ", ";
-
-            delete[] arr;
+            i++;
+            std::swap(arr[i], arr[j]);
         }
-
-        file << std::endl;
     }
-
-    file.close();
+    std::swap(arr[i + 1], arr[r]);
+    return i + 1;
 }
 
-int main()
+void quick_sort_from(int *arr, uint p, uint r)
 {
-    uint start = 10000, end = 200000, step = 10000, samples = 5;
-    collect_data(selection_sort, "selection_sort.csv", start, end, step, samples);
-    collect_data(insertion_sort, "insertion_sort.csv", start, end, step, samples);
+    if (p < r)
+    {
+        uint q = partition(arr, p, r);
+        quick_sort_from(arr, p, q - 1);
+        quick_sort_from(arr, q + 1, r);
+    }
+}
 
-    start = 100000, end = 2000000, step = 100000, samples = 5;
-    collect_data(merge_sort, "merge_sort.csv", start, end, step, samples);
-
-    return 0;
+void quick_sort(int *arr, uint n)
+{
+    quick_sort_from(arr, 0, n - 1);
 }
