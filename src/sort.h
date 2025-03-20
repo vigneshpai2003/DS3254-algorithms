@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include "heap.h"
 
 #define uint unsigned int
 
@@ -131,4 +132,19 @@ void quick_sort_from(int *arr, uint p, uint r)
 void quick_sort(int *arr, uint n)
 {
     quick_sort_from(arr, 0, n - 1);
+}
+
+void heap_sort(int *arr, uint n)
+{
+    int m = n;
+    Heap heap(arr, n);
+    heap.build_max_heap();
+
+    while (m > 1)
+    {
+        std::swap(arr[0], arr[m - 1]);
+        m--;
+        heap.size = m;
+        heap.max_heapify(0);
+    }
 }
